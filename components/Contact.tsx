@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion, Variants } from 'framer-motion';
 import { Mail, Phone, MapPin, Linkedin, Send, MessageSquare, ArrowRight } from 'lucide-react';
 import { useRef } from 'react';
 
@@ -45,9 +45,13 @@ export default function Contact() {
     const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
     const shouldReduceMotion = useReducedMotion();
 
-    const fadeInUp = {
+    const fadeInUp: Variants = {
         hidden: { opacity: 0, y: 30 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.8, ease: "easeOut" }
+        }
     };
 
     return (

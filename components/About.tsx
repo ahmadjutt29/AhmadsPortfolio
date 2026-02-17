@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion, Variants } from 'framer-motion';
 import { Award, BookOpen, Code, Globe, Terminal } from 'lucide-react';
 import { useRef } from 'react';
 
@@ -18,11 +18,15 @@ export default function About() {
     const transition = {
         duration: 0.3,
         ease: "easeOut"
-    };
+    } as const;
 
-    const fadeInUp = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition }
+    const fadeInUp: Variants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.8, ease: "easeOut" }
+        }
     };
 
     return (
