@@ -1,8 +1,9 @@
 'use client';
 
-import { motion, useScroll, useTransform, useReducedMotion, Variants } from 'framer-motion';
-import { Mail, Phone, MapPin, Linkedin, Send, MessageSquare, ArrowRight } from 'lucide-react';
-import { useRef } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion, Variants, AnimatePresence } from 'framer-motion';
+import { Mail, Phone, MapPin, Linkedin, Send, MessageSquare, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 const contactInfo = [
     {
@@ -37,6 +38,10 @@ const contactInfo = [
 
 export default function Contact() {
     const containerRef = useRef(null);
+    const formRef = useRef<HTMLFormElement>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
@@ -51,6 +56,34 @@ export default function Contact() {
             opacity: 1,
             y: 0,
             transition: { duration: 0.8, ease: "easeOut" }
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!formRef.current) return;
+
+        setIsSubmitting(true);
+        setSubmitStatus('idle');
+
+        try {
+            await emailjs.sendForm(
+                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
+                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
+                formRef.current,
+                {
+                    publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '',
+                }
+            );
+            setSubmitStatus('success');
+            formRef.current.reset();
+        } catch (error) {
+            console.error('EmailJS Error:', error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+            // Reset status after 5 seconds
+            setTimeout(() => setSubmitStatus('idle'), 5000);
         }
     };
 
@@ -99,12 +132,14 @@ export default function Contact() {
                         transition={{ duration: 1, delay: 0.2 }}
                         className="lg:col-span-7"
                     >
-                        <form className="space-y-20" onSubmit={(e) => e.preventDefault()}>
+                        <form ref={formRef} className="space-y-20" onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
                                 <div className="group space-y-4">
                                     <label className="text-xs uppercase tracking-[0.5em] text-gray-400 font-mono ml-1 group-focus-within:text-purple-400 transition-colors font-bold">Identification</label>
                                     <input
                                         type="text"
+                                        name="user_name"
+                                        required
                                         placeholder="Name or Organization"
                                         className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white/10 transition-all text-sm md:text-base font-light rounded-t-2xl backdrop-blur-sm"
                                     />
@@ -113,6 +148,8 @@ export default function Contact() {
                                     <label className="text-xs uppercase tracking-[0.5em] text-gray-400 font-mono ml-1 group-focus-within:text-blue-500 transition-colors font-bold">E-Mail Address</label>
                                     <input
                                         type="email"
+                                        name="user_email"
+                                        required
                                         placeholder="hello@world.com"
                                         className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all text-sm md:text-base font-light rounded-t-2xl backdrop-blur-sm"
                                     />
@@ -122,25 +159,61 @@ export default function Contact() {
                             <div className="group space-y-4 pt-12">
                                 <label className="text-xs uppercase tracking-[0.5em] text-gray-400 font-mono ml-1 group-focus-within:text-emerald-500 transition-colors font-bold">The Brief / Message</label>
                                 <textarea
+                                    name="message"
+                                    required
                                     rows={5}
                                     placeholder="Tell me about your vision, technical challenges, or just say hello..."
                                     className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:bg-white/10 transition-all text-sm md:text-base font-light resize-none leading-relaxed rounded-t-2xl backdrop-blur-sm"
                                 />
                             </div>
 
-                            <div className="pt-8">
+                            <div className="pt-8 flex flex-col gap-6">
                                 <motion.button
-                                    whileHover={{ x: 15 }}
-                                    className="flex items-center gap-6 group"
+                                    disabled={isSubmitting}
+                                    whileHover={isSubmitting ? {} : { x: 15 }}
+                                    className={`flex items-center gap-6 group ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
                                     <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:border-white transition-all duration-500 shadow-2xl">
-                                        <Send className="w-6 h-6 text-white group-hover:text-black transition-colors" />
+                                        {isSubmitting ? (
+                                            <Loader2 className="w-6 h-6 text-white animate-spin" />
+                                        ) : (
+                                            <Send className="w-6 h-6 text-white group-hover:text-black transition-colors" />
+                                        )}
                                     </div>
                                     <div className="flex flex-col items-start transition-transform duration-500">
-                                        <span className="text-xs font-black tracking-[0.4em] text-white">SEND MESSAGE</span>
-                                        <span className="text-[10px] font-mono text-gray-600 uppercase group-hover:text-blue-500">Ready for Transmission</span>
+                                        <span className="text-xs font-black tracking-[0.4em] text-white">
+                                            {isSubmitting ? 'TRANSMITTING...' : 'SEND MESSAGE'}
+                                        </span>
+                                        <span className="text-[10px] font-mono text-gray-600 uppercase group-hover:text-blue-500">
+                                            {isSubmitting ? 'Data Encoding in Progress' : 'Ready for Transmission'}
+                                        </span>
                                     </div>
                                 </motion.button>
+
+                                <AnimatePresence mode="wait">
+                                    {submitStatus === 'success' && (
+                                        <motion.div
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 20 }}
+                                            className="flex items-center gap-3 text-emerald-400 font-mono text-xs tracking-widest uppercase"
+                                        >
+                                            <CheckCircle className="w-4 h-4" />
+                                            <span>Message Transmitted Successfully</span>
+                                        </motion.div>
+                                    )}
+                                    {submitStatus === 'error' && (
+                                        <motion.div
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 20 }}
+                                            className="flex items-center gap-3 text-red-400 font-mono text-xs tracking-widest uppercase"
+                                        >
+                                            <AlertCircle className="w-4 h-4" />
+                                            <span>Transmission Failed. Please try again.</span>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </form>
                     </motion.div>
