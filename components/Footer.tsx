@@ -48,7 +48,7 @@ export default function Footer() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="relative z-10 w-full max-w-[90rem] mx-auto px-6 py-12 md:py-20"
+                className="relative z-10 w-full px-8 md:px-16 lg:px-20 py-12 md:py-20"
             >
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
 

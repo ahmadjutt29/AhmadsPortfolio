@@ -102,7 +102,7 @@ export default function Experience() {
     };
 
     return (
-        <section id="experience" ref={containerRef} className="relative z-20 w-full py-32 flex flex-col items-center bg-[#121212]/30 backdrop-blur-md overflow-hidden">
+        <section id="experience" ref={containerRef} className="relative z-20 w-full py-16 md:py-32 flex flex-col items-center bg-[#121212]/30 backdrop-blur-md overflow-hidden">
 
             {/* Background Glow */}
             <motion.div
@@ -118,10 +118,10 @@ export default function Experience() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
                     variants={fadeInUp}
-                    className="mb-32 text-center"
+                    className="mb-12 md:mb-32 text-center"
                 >
                     <span className="text-sm font-mono text-purple-500 tracking-widest uppercase mb-4 block">Professional Path</span>
-                    <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
+                    <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tight">
                         Work <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Experience.</span>
                     </h2>
                 </motion.div>
@@ -129,11 +129,10 @@ export default function Experience() {
                 {/* Timeline Container */}
                 <div className="relative max-w-6xl mx-auto">
 
-                    {/* Main Timeline Line */}
-                    <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-purple-500/50 via-blue-500/30 to-transparent -translate-x-1/2 hidden md:block z-0" />
-                    <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-purple-500/50 via-blue-500/30 to-transparent -translate-x-1/2 md:hidden z-0" />
+                    {/* Main Timeline Line — Desktop only */}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-purple-500/50 via-blue-500/30 to-transparent -translate-x-1/2 hidden md:block z-0" />
 
-                    <div className="space-y-40">
+                    <div className="space-y-20 md:space-y-40">
                         {experiences.map((job, index) => (
                             <motion.div
                                 key={index}
@@ -141,46 +140,97 @@ export default function Experience() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ delay: index * 0.1, duration: 0.6 }}
-                                className={`relative flex flex-col md:flex-row items-start md:items-center justify-between gap-12 md:gap-0 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
+                                className={`relative flex flex-col md:flex-row items-start md:items-center justify-between gap-0 md:gap-0 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
                             >
-                                {/* Timeline Node (Icon) - Centered Exactly on the line */}
-                                <div className="absolute left-8 md:left-1/2 top-0 md:top-1/2 -translate-y-1/2 -translate-x-1/2 z-20">
+                                {/* Timeline Node (Icon) — Desktop: centered on line, Mobile: inside the card */}
+                                <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 hidden md:block">
                                     <motion.div
                                         whileHover={{ scale: 1.1, rotate: 5 }}
-                                        className={`p-4 md:p-5 rounded-3xl bg-[#121212] border ${job.border} ${job.color} shadow-[0_0_30px_rgba(168,85,247,0.2)] ring-[16px] ring-[#121212]`}
+                                        className={`p-5 rounded-3xl bg-[#121212] border ${job.border} ${job.color} shadow-[0_0_30px_rgba(168,85,247,0.2)] ring-[16px] ring-[#121212]`}
                                     >
-                                        <job.icon className="w-8 h-8 md:w-10 md:h-10" />
+                                        <job.icon className="w-10 h-10" />
                                     </motion.div>
                                 </div>
 
-                                {/* Content Card - Giving explicit width and gutter */}
-                                <div className={`w-full md:w-[45%] pl-24 md:pl-0 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                                    <div className="group relative transition-all duration-300">
+                                {/* ====== MOBILE CARD (shown < md) ====== */}
+                                <div className="block md:hidden w-full">
+                                    <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-7">
+                                        {/* Accent top bar */}
+                                        <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${index % 2 === 0 ? 'from-purple-500 to-blue-500' : 'from-blue-500 to-purple-500'
+                                            }`} />
 
-                                        {/* Period Overlay (Mobile) */}
-                                        <div className="flex items-center gap-2 mb-6 text-xs font-mono text-gray-500 md:hidden">
-                                            <Calendar className="w-3 h-3" />
-                                            {job.period}
+                                        {/* Icon + Period row */}
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className={`p-2.5 rounded-xl border ${job.border} ${job.color} ${job.bg}`}>
+                                                <job.icon className="w-5 h-5" />
+                                            </div>
+                                            <div className="flex items-center gap-1.5 text-[11px] font-mono text-gray-500">
+                                                <Calendar className="w-3 h-3" />
+                                                {job.period}
+                                            </div>
                                         </div>
 
+                                        {/* Role + Company */}
+                                        <h3 className="text-xl font-extrabold text-white tracking-tight leading-tight mb-1">
+                                            {job.role}
+                                        </h3>
+                                        <p className="text-xs font-bold text-gray-500 uppercase tracking-[0.15em] mb-3">
+                                            {job.company}
+                                        </p>
+
+                                        {/* Project */}
+                                        <div className="border-l-3 border-purple-500/40 pl-3 mb-4">
+                                            <p className="text-sm text-purple-300/90 font-medium italic leading-relaxed">
+                                                {job.project}
+                                            </p>
+                                        </div>
+
+                                        {/* Points */}
+                                        <ul className="space-y-2.5 mb-4">
+                                            {job.points.map((point, j) => (
+                                                <li key={j} className="flex items-start gap-2.5 text-gray-400 text-sm leading-relaxed">
+                                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0 shadow-[0_0_10px_rgba(168,85,247,0.4)]" />
+                                                    <span>{point}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+
+                                        {/* Tech Stack */}
+                                        <div className="flex flex-wrap gap-2">
+                                            {job.tech.map((t, j) => (
+                                                <span
+                                                    key={j}
+                                                    className="text-[9px] font-black tracking-widest text-gray-500 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full"
+                                                >
+                                                    {t}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* ====== DESKTOP Content Card (shown >= md) ====== */}
+                                <div className={`hidden md:block md:w-[45%] ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                                    <div className="group relative transition-all duration-300">
+
                                         <div className={`flex flex-col ${index % 2 === 0 ? 'md:items-end' : 'md:items-start'} mb-8`}>
-                                            <h3 className="text-3xl md:text-5xl font-extrabold text-white tracking-tighter group-hover:text-purple-400 transition-colors leading-tight">
+                                            <h3 className="text-5xl font-extrabold text-white tracking-tighter group-hover:text-purple-400 transition-colors leading-tight">
                                                 {job.role}
                                             </h3>
-                                            <p className="text-lg md:text-xl font-bold text-gray-400 mt-3 uppercase tracking-[0.25em]">
+                                            <p className="text-xl font-bold text-gray-400 mt-3 uppercase tracking-[0.25em]">
                                                 {job.company}
                                             </p>
                                         </div>
 
                                         <div className={`mb-10 ${index % 2 === 0 ? 'md:border-r-4 md:border-l-0 pr-6' : 'border-l-4 pl-6'} border-purple-500/30 py-2`}>
-                                            <p className="text-lg md:text-xl text-purple-300/90 font-medium italic leading-relaxed">
+                                            <p className="text-xl text-purple-300/90 font-medium italic leading-relaxed">
                                                 {job.project}
                                             </p>
                                         </div>
 
                                         <ul className={`space-y-6 mb-12 flex flex-col ${index % 2 === 0 ? 'md:items-end' : 'md:items-start'}`}>
                                             {job.points.map((point, j) => (
-                                                <li key={j} className={`flex items-start gap-4 text-gray-400 text-base md:text-lg leading-relaxed group/item ${index % 2 === 0 ? 'md:flex-row-reverse text-right' : ''}`}>
+                                                <li key={j} className={`flex items-start gap-4 text-gray-400 text-lg leading-relaxed group/item ${index % 2 === 0 ? 'md:flex-row-reverse text-right' : ''}`}>
                                                     <div className={`mt-3 w-2 h-2 rounded-full bg-purple-500 shrink-0 shadow-[0_0_15px_rgba(168,85,247,0.5)] group-hover/item:scale-150 transition-transform`} />
                                                     <span className="group-hover/item:text-gray-100 transition-colors">{point}</span>
                                                 </li>
@@ -192,7 +242,7 @@ export default function Experience() {
                                             {job.tech.map((t, j) => (
                                                 <span
                                                     key={j}
-                                                    className="text-[10px] md:text-xs font-black tracking-widest text-gray-500 bg-white/5 border border-white/10 px-4 py-2 rounded-full hover:bg-purple-500/10 hover:border-purple-500/30 hover:text-purple-300 transition-all duration-300"
+                                                    className="text-xs font-black tracking-widest text-gray-500 bg-white/5 border border-white/10 px-4 py-2 rounded-full hover:bg-purple-500/10 hover:border-purple-500/30 hover:text-purple-300 transition-all duration-300"
                                                 >
                                                     {t}
                                                 </span>
@@ -201,7 +251,7 @@ export default function Experience() {
                                     </div>
                                 </div>
 
-                                {/* Date Box - Symmetrical Width */}
+                                {/* Date Box — Desktop only */}
                                 <div className={`hidden md:flex md:w-[45%] ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
                                     <div className="flex flex-col items-center gap-4 group">
                                         <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md border border-white/10 px-10 py-5 rounded-[2rem] shadow-2xl transition-all duration-500 group-hover:border-purple-500/50 group-hover:bg-white/10 group-hover:-translate-y-2">

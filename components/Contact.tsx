@@ -106,7 +106,7 @@ export default function Contact() {
                                     <input
                                         type="text"
                                         placeholder="Name or Organization"
-                                        className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white/10 transition-all text-xl md:text-2xl font-light rounded-t-2xl backdrop-blur-sm"
+                                        className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white/10 transition-all text-sm md:text-base font-light rounded-t-2xl backdrop-blur-sm"
                                     />
                                 </div>
                                 <div className="group space-y-4">
@@ -114,7 +114,7 @@ export default function Contact() {
                                     <input
                                         type="email"
                                         placeholder="hello@world.com"
-                                        className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all text-xl md:text-2xl font-light rounded-t-2xl backdrop-blur-sm"
+                                        className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all text-sm md:text-base font-light rounded-t-2xl backdrop-blur-sm"
                                     />
                                 </div>
                             </div>
@@ -124,7 +124,7 @@ export default function Contact() {
                                 <textarea
                                     rows={5}
                                     placeholder="Tell me about your vision, technical challenges, or just say hello..."
-                                    className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:bg-white/10 transition-all text-xl md:text-2xl font-light resize-none leading-relaxed rounded-t-2xl backdrop-blur-sm"
+                                    className="w-full bg-white/5 border-b-2 border-white/30 py-6 px-6 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:bg-white/10 transition-all text-sm md:text-base font-light resize-none leading-relaxed rounded-t-2xl backdrop-blur-sm"
                                 />
                             </div>
 

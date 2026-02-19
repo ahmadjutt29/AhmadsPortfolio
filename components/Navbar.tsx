@@ -43,7 +43,7 @@ export default function Navbar() {
                 className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-[#121212]/80 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'
                     }`}
             >
-                <div className="max-w-[95rem] mx-auto px-6 md:px-12 flex items-end justify-between">
+                <div className="w-full px-8 md:px-16 lg:px-20 flex items-end justify-between">
                     {/* Logo Area */}
                     <a href="#home" className="group flex flex-col">
                         <span className="text-xs font-mono text-gray-500 mb-1 block group-hover:text-blue-400 transition-colors">EST. 2026</span>
